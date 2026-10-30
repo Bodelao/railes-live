@@ -1,0 +1,23 @@
+{
+  "name": "railes-live",
+  "version": "1.0.0",
+  "description": "Visión en tiempo real y gestión visual de los trenes de España",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@fastify/static": "^10.1.8",
+    "adm-zip": "^0.6.1",
+    "csv-parse": "^7.0.3",
+    "fastify": "^5.12.7",
+    "gtfs-realtime-bindings": "^2.2.0",
+    "leaflet": "^1.9.4"
+  }
+}

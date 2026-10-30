@@ -1,0 +1,4 @@
+{"total_count":2,"results":[
+ {"id":"S1-123","lin":"S1","dir":"A","origen":"PC","desti":"TR","ut":"112.07","en_hora":"True","properes_parades":"{\"parada\": \"SC\"};{\"parada\": \"TR\"}","geo_point_2d":{"lat":41.47,"lon":2.08}},
+ {"id":"R5-9","lin":"R5","origen":"PE","desti":"MN","ut":"213","en_hora":"False","estacionat_a":"MA","geo_point_2d":{"lat":41.47,"lon":1.93}}
+]}

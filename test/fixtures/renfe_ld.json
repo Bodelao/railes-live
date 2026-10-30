@@ -1,0 +1,4 @@
+{"fechaActualizacion":"2026-10-30T12:00:00","trenes":[
+ {"codComercial":"03063","codProduct":2,"desCorridor":"Madrid-Barcelona","codOrigen":"60000","codDestino":"71801","codEstAnt":"70600","codEstSig":"71400","horaLlegadaSigEst":"12:34","latitud":41.65,"longitud":-0.91,"ultRetraso":"12","accesible":true,"GpsTime":1761825600000},
+ {"codComercial":"00733","codProduct":99,"latitud":"40,10","longitud":"-3,70","ultRetraso":""}
+]}

@@ -1,0 +1,18 @@
+{
+  "port": 3000,
+  "mode": "hybrid",
+  "sources": {
+    "schedule": {
+      "enabled": true,
+      "intervalMs": 15000,
+      "feeds": [
+        { "id": "iryo", "operator": "Iryo", "service": "Iryo", "url": "https://<URL del GTFS de Iryo en nap.transportes.gob.es>" },
+        { "id": "ouigo", "operator": "Ouigo", "service": "Ouigo", "url": "https://<URL del GTFS de Ouigo en el NAP>" },
+        { "id": "fgv", "operator": "FGV", "service": "Metrovalencia", "path": "data/gtfs/fgv.zip" },
+        { "id": "sfm", "operator": "SFM", "service": "Tren", "path": "data/gtfs/sfm.zip" }
+      ]
+    },
+    "euskotren": { "enabled": true, "intervalMs": 30000, "operator": "Euskotren", "url": "https://<URL GTFS-RT vehicle positions de Euskotren>" },
+    "fgv-rt": { "enabled": false, "type": "gtfs-rt", "intervalMs": 30000, "operator": "FGV", "url": "https://<URL GTFS-RT si existe>" }
+  }
+}

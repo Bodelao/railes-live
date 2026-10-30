@@ -1,0 +1,10 @@
+services:
+  railes-live:
+    build: .
+    ports: ["3000:3000"]
+    environment:
+      MODE: ${MODE:-hybrid}
+    volumes:
+      - ./config.json:/app/config.json:ro
+      - ./data:/app/data:ro
+    restart: unless-stopped

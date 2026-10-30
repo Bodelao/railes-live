@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RailES Live</title>
+  <link rel="stylesheet" href="/vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="dot"></span> RailES Live <small id="mode"></small></div>
+    <div class="kpis" aria-live="polite">
+      <div><b id="k-active">–</b><span>trenes activos</span></div>
+      <div><b id="k-punct">–</b><span>puntualidad (&lt;5 min)</span></div>
+      <div><b id="k-delay">–</b><span>retraso medio</span></div>
+      <div><b id="k-alerts">0</b><span>alertas abiertas</span></div>
+    </div>
+    <div class="actions">
+      <button id="btn-control" title="Modo sala de control: tema oscuro y rotación entre núcleos">Sala de control</button>
+      <button id="btn-panel" aria-controls="panel" aria-expanded="true">Panel</button>
+    </div>
+  </header>
+
+  <main>
+    <div id="map" role="application" aria-label="Mapa de trenes"></div>
+    <div class="legend" id="legend"></div>
+    <div class="updated" id="updated">Conectando…</div>
+
+    <aside id="panel">
+      <nav class="tabs" role="tablist">
+        <button role="tab" data-tab="trains" aria-selected="true">Trenes</button>
+        <button role="tab" data-tab="alerts">Alertas <span class="badge" id="alert-badge">0</span></button>
+        <button role="tab" data-tab="sources">Fuentes</button>
+        <button role="tab" data-tab="stats">Resumen</button>
+      </nav>
+
+      <section data-panel="trains">
+        <div class="filters">
+          <input id="f-q" type="search" placeholder="Buscar nº, línea, estación…" aria-label="Buscar">
+          <div id="f-operators" class="chips" aria-label="Operadores"></div>
+          <div class="row">
+            <label>Servicio <select id="f-service"><option value="">Todos</option></select></label>
+            <label>Retraso ≥ <select id="f-delay"><option value="">—</option><option>5</option><option>15</option><option>30</option></select></label>
+          </div>
+          <div id="f-ptype" class="chips small" aria-label="Tipo de posición"></div>
+        </div>
+        <div class="list-head">
+          <span id="count"></span>
+          <label>Ordenar <select id="f-sort"><option value="delay">Retraso</option><option value="operator">Operador</option><option value="number">Número</option></select></label>
+        </div>
+        <ul id="list" class="list"></ul>
+      </section>
+
+      <section data-panel="alerts" hidden>
+        <div class="row"><label><input type="checkbox" id="f-ack"> Mostrar reconocidas</label></div>
+        <ul id="alerts" class="list"></ul>
+      </section>
+
+      <section data-panel="sources" hidden><ul id="sources" class="list"></ul>
+        <p class="note">Calidad de la posición: <b>GPS</b> (posición del vehículo), <b>Operador</b> (publicada por el operador), <b>Horario</b> (estimada a partir del GTFS), <b>Simulada</b> (modo demo).</p>
+      </section>
+
+      <section data-panel="stats" hidden><div id="stats"></div></section>
+    </aside>
+
+    <div id="detail" class="detail" hidden></div>
+  </main>
+  <script src="/vendor/leaflet/leaflet.js"></script>
+  <script src="/app.js" type="module"></script>
+</body>
+</html>
