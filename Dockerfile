@@ -6,4 +6,4 @@ COPY . .
 ENV PORT=3000 MODE=hybrid
 EXPOSE 3000
 VOLUME /app/data
-CMD ["node", "--no-warnings=ExperimentalWarning", "src/server.js"]
+CMD ["node", "--no-warnings=ExperimentalWarning", "src/start.js"]

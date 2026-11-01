@@ -44,7 +44,7 @@ MODE=live npm start         # solo fuentes reales
 npm test
 ```
 
-Requiere Node.js 22.5 o superior (usa el módulo SQLite integrado `node:sqlite`).
+Requiere Node.js 20 o superior; los informes necesitan Node.js 22.13 o superior (usan el SQLite integrado `node:sqlite`). Con un Node anterior, el mapa funciona y los informes avisan de que hay que actualizar.
 
 Con Docker: `docker compose up --build`.
 

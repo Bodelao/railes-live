@@ -5,15 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "node --no-warnings=ExperimentalWarning --test test/*.test.js",
-    "start": "node --no-warnings=ExperimentalWarning src/server.js",
-    "dev": "node --no-warnings=ExperimentalWarning --watch src/server.js"
+    "start": "node --no-warnings=ExperimentalWarning src/start.js",
+    "dev": "node --no-warnings=ExperimentalWarning --watch src/start.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "module",
   "dependencies": {
-    "@fastify/static": "^10.1.8",
+    "@fastify/static": "^8.3.0",
     "adm-zip": "^0.6.1",
     "chart.js": "^4.6.1",
     "csv-parse": "^7.0.3",
@@ -22,6 +22,6 @@
     "leaflet": "^1.9.4"
   },
   "engines": {
-    "node": ">=22.5"
+    "node": ">=20"
   }
 }

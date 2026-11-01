@@ -57,7 +57,9 @@ const yAxis = (title, extra = {}) => ({ beginAtZero: true, title: { display: tru
 async function load() {
   const q = query();
   history.replaceState(null, '', `?${q}`);
-  const r = await (await fetch(`/api/reports?${q}`)).json();
+  const res = await fetch(`/api/reports?${q}`);
+  const r = await res.json();
+  if (!res.ok) { $('banner').hidden = false; $('banner').textContent = r.error ?? 'No se han podido cargar los informes.'; return; }
 
   // Opciones de los desplegables (sin perder la selección)
   for (const [id, list] of [['operator', r.options.operators], ['service', r.options.services]]) {

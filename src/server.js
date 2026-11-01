@@ -6,9 +6,6 @@ import { Registry } from './core/registry.js';
 import { Alerts } from './core/alerts.js';
 import { startSources } from './sources.js';
 import { STATIONS } from './data/network.js';
-import { History } from './core/history.js';
-import { buildReport, toCsv } from './core/reports.js';
-import { seedDemoHistory } from './data/seedHistory.js';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const app = Fastify({ logger: { level: process.env.LOG_LEVEL || 'info' } });
@@ -17,14 +14,23 @@ const alerts = new Alerts(registry, config.alerts);
 const sources = startSources(config, registry, alerts, app.log);
 setInterval(() => registry.expire(), 30_000).unref();
 
-// Histórico: una muestra por minuto de todos los trenes + registro de alertas
-const history = new History(config.historyFile);
-if (config.sources.simulator.enabled && history.isEmpty()) {
-  app.log.info('Histórico vacío: generando 45 días de datos de demostración (marcados como simulados)');
-  seedDemoHistory(history);
+// Histórico (SQLite integrado en Node ≥ 22.13). Si no está disponible, el mapa funciona igual y solo se desactivan los informes.
+let history = null, buildReport, toCsv;
+try {
+  const { History } = await import('./core/history.js');
+  ({ buildReport, toCsv } = await import('./core/reports.js'));
+  const { seedDemoHistory } = await import('./data/seedHistory.js');
+  history = new History(config.historyFile);
+  if (config.sources.simulator.enabled && history.isEmpty()) {
+    app.log.info('Histórico vacío: generando 45 días de datos de demostración (marcados como simulados)');
+    seedDemoHistory(history);
+  }
+  setInterval(() => history.sample(registry.list()), 60_000).unref();
+  alerts.onAlert((a) => history.logAlert(a, a.trainId && registry.get(a.trainId)));
+} catch (e) {
+  app.log.warn(`Informes desactivados: tu Node.js (${process.version}) no incluye SQLite. Actualiza a Node 22.13 o superior. Detalle: ${e.message}`);
 }
-setInterval(() => history.sample(registry.list()), 60_000).unref();
-alerts.onAlert((a) => history.logAlert(a, a.trainId && registry.get(a.trainId)));
+const NO_HISTORY = { error: `Los informes necesitan Node.js 22.13 o superior (el servidor usa ${process.version}). Actualiza Node y reinicia la aplicación.` };
 
 app.register(fastifyStatic, { root: `${root}public` });
 app.register(fastifyStatic, { root: `${root}node_modules/leaflet/dist`, prefix: '/vendor/leaflet/', decorateReply: false });
@@ -33,16 +39,17 @@ app.register(fastifyStatic, { root: `${root}node_modules/chart.js/dist`, prefix:
 // Versión compacta para el mapa (sin estela)
 const compact = ({ trail, firstSeen, stoppedSince, _stoppedAlerted, ...t }) => t;
 
-app.get('/api/health', async () => ({ ok: true, mode: config.mode, uptime: process.uptime() }));
+app.get('/api/health', async () => ({ ok: true, mode: config.mode, node: process.version, reports: !!history, uptime: process.uptime() }));
 app.get('/api/trains', async (req) => registry.list(req.query).map(compact));
 app.get('/api/trains/:id', async (req, reply) => registry.get(req.params.id) ?? reply.code(404).send({ error: 'Tren no encontrado' }));
 app.get('/api/sources', async () => Object.values(sources));
 app.get('/api/stats', async () => registry.stats());
 app.get('/api/alerts', async () => alerts.items);
 app.post('/api/alerts/:id/ack', async (req, reply) => alerts.ack(req.params.id) ?? reply.code(404).send({ error: 'Alerta no encontrada' }));
-app.get('/api/reports', async (req) => buildReport(history, req.query));
+app.get('/api/reports', async (req, reply) => (history ? buildReport(history, req.query) : reply.code(503).send(NO_HISTORY)));
 const EXPORTS = { lineas: 'worstLines', operadores: 'byOperator', servicios: 'byService', diario: 'daily', horas: 'byHour', viajes: 'worstTrips' };
 app.get('/api/reports/export/:table', async (req, reply) => {
+  if (!history) return reply.code(503).send(NO_HISTORY);
   const key = EXPORTS[req.params.table];
   if (!key) return reply.code(404).send({ error: `Tabla desconocida. Opciones: ${Object.keys(EXPORTS).join(', ')}` });
   const rows = buildReport(history, req.query)[key];
