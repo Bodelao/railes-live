@@ -73,5 +73,13 @@ const snapshot = () => ({ at: new Date().toISOString(), trains: registry.list().
 setInterval(() => { if (clients.size) { const s = snapshot(); for (const c of clients) c.send('snapshot', s); } }, 3_000).unref();
 alerts.onAlert((a) => { for (const c of clients) c.send('alert', a); });
 
-await app.listen({ port: config.port, host: '0.0.0.0' });
+try {
+  await app.listen({ port: config.port, host: '0.0.0.0' });
+} catch (e) {
+  if (e.code !== 'EADDRINUSE') throw e;
+  console.error(`\n✖ El puerto ${config.port} ya está en uso: probablemente RailES Live ya está abierto en otra ventana de Terminal.\n` +
+    `  Ciérralo allí con Ctrl + C, o libera el puerto con:  lsof -ti tcp:${config.port} | xargs kill\n` +
+    `  También puedes usar otro puerto:  PORT=3001 npm start\n`);
+  process.exit(1);
+}
 app.log.info(`RailES Live en http://localhost:${config.port} (modo ${config.mode})`);
