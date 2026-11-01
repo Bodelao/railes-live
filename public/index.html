@@ -2,8 +2,15 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>RailES Live</title>
+  <meta name="description" content="Posición en tiempo real de los trenes de España y gestión visual de retrasos">
+  <meta name="theme-color" content="#6250d6">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
   <link rel="stylesheet" href="/vendor/leaflet/leaflet.css">
   <link rel="stylesheet" href="/style.css">
 </head>
@@ -17,13 +24,17 @@
       <div><b id="k-alerts">0</b><span>alertas abiertas</span></div>
     </div>
     <div class="actions">
+      <label class="goto">Ir a <select id="goto" aria-label="Ir a una zona"></select></label>
+      <a class="btn" href="/informes.html">Informes</a>
       <button id="btn-control" title="Modo sala de control: tema oscuro y rotación entre núcleos">Sala de control</button>
       <button id="btn-panel" aria-controls="panel" aria-expanded="true">Panel</button>
+      <button id="btn-install" hidden>Instalar app</button>
     </div>
   </header>
 
   <main>
     <div id="map" role="application" aria-label="Mapa de trenes"></div>
+    <button class="legend-toggle" id="legend-toggle" aria-expanded="false" aria-controls="legend">Leyenda</button>
     <div class="legend" id="legend"></div>
     <div class="updated" id="updated">Conectando…</div>
 
@@ -61,11 +72,23 @@
         <p class="note">Calidad de la posición: <b>GPS</b> (posición del vehículo), <b>Operador</b> (publicada por el operador), <b>Horario</b> (estimada a partir del GTFS), <b>Simulada</b> (modo demo).</p>
       </section>
 
-      <section data-panel="stats" hidden><div id="stats"></div></section>
+      <section data-panel="stats" hidden><div id="stats"></div>
+        <p><a class="btn block" href="/informes.html">Abrir el cuadro de mandos de informes →</a></p>
+      </section>
     </aside>
 
     <div id="detail" class="detail" hidden></div>
   </main>
+
+  <!-- Navegación inferior (móvil) -->
+  <nav class="bottomnav" aria-label="Navegación">
+    <button data-nav="map" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Zm0 2.2 6 2v11.6l-6-2V6.2Z"/></svg>Mapa</button>
+    <button data-nav="trains"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12a2 2 0 0 1 2 2v10a3 3 0 0 1-3 3l2 3h-2.5l-2-3h-5l-2 3H5l2-3a3 3 0 0 1-3-3V5a2 2 0 0 1 2-2Zm0 2v5h12V5H6Zm2 8a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Zm8 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z"/></svg>Trenes</button>
+    <button data-nav="alerts"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a6 6 0 0 1 6 6v5l2 3v1H4v-1l2-3V8a6 6 0 0 1 6-6Zm-2 17h4a2 2 0 0 1-4 0Z"/></svg>Alertas<span class="badge" id="alert-badge-m">0</span></button>
+    <a href="/informes.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10h3v10H4Zm6.5 0V4h3v16h-3ZM17 20v-7h3v7h-3Z"/></svg>Informes</a>
+    <button data-nav="stats"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 10a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm7 0a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm7 0a2 2 0 1 1 0 4 2 2 0 0 1 0-4Z"/></svg>Más</button>
+  </nav>
+
   <script src="/vendor/leaflet/leaflet.js"></script>
   <script src="/app.js" type="module"></script>
 </body>

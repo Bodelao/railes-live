@@ -2,3 +2,5 @@ node_modules/
 config.json
 data/gtfs/
 *.log
+data/history.db*
+mobile/node_modules/

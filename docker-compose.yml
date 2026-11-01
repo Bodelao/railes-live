@@ -6,5 +6,5 @@ services:
       MODE: ${MODE:-hybrid}
     volumes:
       - ./config.json:/app/config.json:ro
-      - ./data:/app/data:ro
+      - ./data:/app/data
     restart: unless-stopped

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>RailES Informes</title>
+  <meta name="theme-color" content="#6250d6">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/informes.css">
+</head>
+<body class="reports">
+  <header class="topbar">
+    <a class="back" href="/" aria-label="Volver al mapa">← Mapa</a>
+    <div class="brand"><span class="dot"></span> Cuadro de mandos</div>
+    <div class="actions">
+      <details class="export">
+        <summary class="btn">Exportar CSV</summary>
+        <div class="menu" id="exports"></div>
+      </details>
+    </div>
+  </header>
+
+  <form class="filterbar" id="filters" aria-label="Filtros del informe">
+    <div class="seg" role="group" aria-label="Periodo">
+      <button type="button" data-days="1">Hoy</button>
+      <button type="button" data-days="7">7 días</button>
+      <button type="button" data-days="30" aria-pressed="true">30 días</button>
+      <button type="button" data-days="90">90 días</button>
+    </div>
+    <label>Desde <input type="date" id="from"></label>
+    <label>Hasta <input type="date" id="to"></label>
+    <label>Operador <select id="operator"><option value="">Todos</option></select></label>
+    <label>Tipo de tren <select id="service"><option value="">Todos</option></select></label>
+    <label class="check"><input type="checkbox" id="sim" checked> Incluir datos simulados</label>
+  </form>
+
+  <main class="dash">
+    <div class="banner" id="banner" hidden></div>
+
+    <section class="tiles" id="tiles" aria-label="Indicadores clave"></section>
+
+    <section class="grid">
+      <article class="card"><h2>Puntualidad diaria</h2><p class="sub">% de viajes que llegan con menos de 5 min de retraso</p><div class="chart"><canvas id="c-daily-punct"></canvas></div></article>
+      <article class="card"><h2>Retraso medio diario</h2><p class="sub">Minutos de retraso medio a la llegada</p><div class="chart"><canvas id="c-daily-delay"></canvas></div></article>
+
+      <article class="card"><h2>Puntualidad por compañía</h2><p class="sub">% de viajes en hora en el periodo</p><div class="chart"><canvas id="c-op-punct"></canvas></div></article>
+      <article class="card"><h2>Retraso medio por tipo de tren</h2><p class="sub">Minutos, ordenado de mayor a menor</p><div class="chart"><canvas id="c-service"></canvas></div></article>
+
+      <article class="card wide"><h2>Líneas con más retraso</h2><p class="sub">Ranking por retraso medio (mínimo 3 viajes). Pulsa una línea para ver solo su compañía.</p><div class="table-wrap"><table id="t-lines"></table></div></article>
+
+      <article class="card"><h2>Retraso medio por hora del día</h2><p class="sub">Minutos, hora de salida en horario peninsular</p><div class="chart"><canvas id="c-hour"></canvas></div></article>
+      <article class="card"><h2>Distribución de retrasos</h2><p class="sub">Número de viajes por tramo de retraso a la llegada</p><div class="chart"><canvas id="c-dist"></canvas></div></article>
+
+      <article class="card wide"><h2>Mapa de calor: día de la semana × hora</h2><p class="sub">Retraso medio en minutos — más oscuro, más retraso</p><div class="heat-wrap" id="heat"></div></article>
+
+      <article class="card"><h2>Compañías: resumen</h2><div class="table-wrap"><table id="t-ops"></table></div></article>
+      <article class="card"><h2>Tipos de tren: resumen</h2><div class="table-wrap"><table id="t-services"></table></div></article>
+
+      <article class="card"><h2>Viajes con mayor retraso</h2><div class="table-wrap"><table id="t-trips"></table></div></article>
+      <article class="card"><h2>Líneas más puntuales</h2><div class="table-wrap"><table id="t-best"></table></div></article>
+
+      <article class="card"><h2>Alertas generadas</h2><p class="sub">Por tipo y gravedad</p><div class="table-wrap"><table id="t-alerts"></table></div></article>
+      <article class="card"><h2>Calidad del dato</h2><p class="sub">Viajes según el origen de su posición</p><div class="table-wrap"><table id="t-quality"></table></div></article>
+    </section>
+  </main>
+
+  <nav class="bottomnav" aria-label="Navegación">
+    <a href="/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Zm0 2.2 6 2v11.6l-6-2V6.2Z"/></svg>Mapa</a>
+    <a href="/informes.html" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10h3v10H4Zm6.5 0V4h3v16h-3ZM17 20v-7h3v7h-3Z"/></svg>Informes</a>
+  </nav>
+
+  <script src="/vendor/chartjs/chart.umd.min.js"></script>
+  <script src="/informes.js" type="module"></script>
+</body>
+</html>

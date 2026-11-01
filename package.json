@@ -1,12 +1,12 @@
 {
   "name": "railes-live",
-  "version": "1.0.0",
+  "version": "0.2.0",
   "description": "Visión en tiempo real y gestión visual de los trenes de España",
   "main": "index.js",
   "scripts": {
-    "test": "node --test test/*.test.js",
-    "start": "node src/server.js",
-    "dev": "node --watch src/server.js"
+    "test": "node --no-warnings=ExperimentalWarning --test test/*.test.js",
+    "start": "node --no-warnings=ExperimentalWarning src/server.js",
+    "dev": "node --no-warnings=ExperimentalWarning --watch src/server.js"
   },
   "keywords": [],
   "author": "",
@@ -15,9 +15,13 @@
   "dependencies": {
     "@fastify/static": "^10.1.8",
     "adm-zip": "^0.6.1",
+    "chart.js": "^4.6.1",
     "csv-parse": "^7.0.3",
     "fastify": "^5.12.7",
     "gtfs-realtime-bindings": "^2.2.0",
     "leaflet": "^1.9.4"
+  },
+  "engines": {
+    "node": ">=22.5"
   }
 }

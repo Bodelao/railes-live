@@ -7,6 +7,7 @@ const fileCfg = existsSync('config.json') ? JSON.parse(readFileSync('config.json
 export const config = {
   port: Number(env.PORT || fileCfg.port || 3000),
   mode: env.MODE || fileCfg.mode || 'hybrid',
+  historyFile: env.HISTORY_FILE || fileCfg.historyFile || 'data/history.db',
   staleAfterMs: 5 * 60_000,
   trailLength: 30,
   alerts: { delayThresholds: [5, 15, 30], stoppedMinutes: 5 },

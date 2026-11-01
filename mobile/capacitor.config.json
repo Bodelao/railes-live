@@ -1,0 +1,12 @@
+{
+  "appId": "es.railes.live",
+  "appName": "RailES Live",
+  "webDir": "www",
+  "server": {
+    "url": "https://CAMBIA-ESTO-POR-TU-SERVIDOR.example.com",
+    "cleartext": false,
+    "errorPath": "index.html"
+  },
+  "android": { "backgroundColor": "#6250d6" },
+  "ios": { "backgroundColor": "#6250d6", "contentInset": "always" }
+}
