@@ -6,7 +6,7 @@ Visión en tiempo real y gestión visual de los trenes de pasajeros de España: 
 
 ## Novedades v0.2
 
-- **Capas de mapa:** mapa claro, oscuro, callejero (OSM), **satélite**, **híbrido** (satélite + calles y topónimos), **ortofoto PNOA del IGN** y topográfico. Capas superpuestas: vías férreas, velocidad máxima de vía, electrificación (OpenRailwayMap) y estaciones. La elección se recuerda entre visitas.
+- **Capas de mapa:** OpenStreetMap (por defecto, sin clave), mapa oscuro, **satélite**, **híbrido** (satélite + calles y topónimos), **ortofoto PNOA del IGN** topográfico y, opcionalmente, CARTO (puede pedir clave de API). Capas superpuestas: vías férreas, velocidad máxima de vía, electrificación (OpenRailwayMap) y estaciones. La elección se recuerda entre visitas.
 - **Zoom:** rueda/trackpad suave, pellizco en móvil, doble clic sobre un tren para acercarse, *Mayús + arrastrar* para ampliar una zona, selector «Ir a» (Madrid, Barcelona, València…), botones de ver toda España, **mi ubicación** y pantalla completa, botón «Acercar al tren» y **«Seguir tren»**. A zoom alto los trenes muestran su número y retraso.
 - **Cuadro de mandos de informes** (`/informes.html`): ver abajo.
 - **App móvil:** diseño móvil con navegación inferior y PWA instalable; envoltorio nativo Android/iOS en [`mobile/`](mobile/README.md).

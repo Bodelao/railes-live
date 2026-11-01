@@ -106,6 +106,7 @@ main { position: relative; height: calc(100% - 60px); display: flex; }
 .bar-row .v { text-align: right; font-variant-numeric: tabular-nums; }
 
 .leaflet-container { font: inherit; }
+.dark-tiles { filter: invert(1) hue-rotate(180deg) brightness(.95) contrast(.9); }
 :root[data-theme="dark"] .leaflet-control-attribution { background: rgb(26 26 25 / .8); color: var(--muted); }
 :root[data-theme="dark"] .leaflet-control-attribution a { color: var(--accent); }
 

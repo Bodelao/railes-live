@@ -1,5 +1,5 @@
 // Service worker: la interfaz funciona offline (carcasa en caché); los datos siempre van a la red.
-const CACHE = 'railes-v2';
+const CACHE = 'railes-v3';
 const SHELL = ['/', '/index.html', '/app.js', '/common.js', '/style.css', '/informes.html', '/informes.js', '/informes.css',
   '/manifest.webmanifest', '/icons/icon.svg', '/icons/icon-192.png', '/vendor/leaflet/leaflet.js', '/vendor/leaflet/leaflet.css', '/vendor/chartjs/chart.umd.min.js'];
 

@@ -48,10 +48,11 @@ gotoSel.onchange = () => { const z = ZONES[gotoSel.value]; if (z) map.flyTo(z[1]
 // ---------- Mapa: capas base (estándar, satélite, híbrido…) ----------
 const OSM = '© OpenStreetMap';
 const esri = (svc, o = {}) => L.tileLayer(`https://server.arcgisonline.com/ArcGIS/rest/services/${svc}/MapServer/tile/{z}/{y}/{x}`, { maxZoom: 19, maxNativeZoom: 18, ...o });
+// OpenStreetMap no requiere clave; el modo oscuro se obtiene invirtiendo sus teselas por CSS.
+const osm = (o = {}) => L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: OSM, ...o });
 const BASES = {
-  'Mapa claro': L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 19, attribution: `${OSM}, © CARTO` }),
-  'Mapa oscuro': L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 19, attribution: `${OSM}, © CARTO` }),
-  'Callejero (OpenStreetMap)': L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: OSM }),
+  'Mapa (OpenStreetMap)': osm(),
+  'Mapa oscuro': osm({ className: 'dark-tiles' }),
   'Satélite': esri('World_Imagery', { attribution: 'Imágenes © Esri, Maxar, Earthstar Geographics' }),
   'Híbrido (satélite + calles)': L.layerGroup([
     esri('World_Imagery', { attribution: 'Imágenes © Esri, Maxar' }),
@@ -60,6 +61,9 @@ const BASES = {
   ]),
   'Ortofoto PNOA (IGN España)': L.tileLayer('https://www.ign.es/wmts/pnoa-ma?request=GetTile&service=WMTS&VERSION=1.0.0&Layer=OI.OrthoimageCoverage&Style=default&Format=image/jpeg&TileMatrixSet=GoogleMapsCompatible&TileMatrix={z}&TileRow={y}&TileCol={x}', { maxZoom: 19, attribution: 'PNOA cedido por © Instituto Geográfico Nacional' }),
   'Topográfico': L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', { maxZoom: 17, attribution: `${OSM}, SRTM, © OpenTopoMap` }),
+  // CARTO puede pedir clave de API según el uso; se deja como opción
+  'Mapa claro (CARTO)': L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 19, attribution: `${OSM}, © CARTO` }),
+  'Mapa oscuro (CARTO)': L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 19, attribution: `${OSM}, © CARTO` }),
 };
 const orm = (style) => L.tileLayer(`https://{s}.tiles.openrailwaymap.org/${style}/{z}/{x}/{y}.png`, { maxZoom: 19, opacity: 0.6, attribution: '© OpenRailwayMap' });
 const stationsLayer = L.layerGroup();
@@ -69,8 +73,9 @@ const OVERLAYS = {
   'Electrificación': orm('electrification'),
   'Estaciones principales': stationsLayer,
 };
-let baseName = store.get('railes.base') ?? (isDark() ? 'Mapa oscuro' : 'Mapa claro');
-if (!BASES[baseName]) baseName = 'Mapa claro';
+const DEFAULT_BASE = isDark() ? 'Mapa oscuro' : 'Mapa (OpenStreetMap)';
+let baseName = store.get('railes.base') ?? DEFAULT_BASE;
+if (!BASES[baseName]) baseName = DEFAULT_BASE;
 BASES[baseName].addTo(map);
 for (const name of store.getJSON('railes.overlays', [])) OVERLAYS[name]?.addTo(map);
 L.control.layers(BASES, OVERLAYS, { position: 'topright', collapsed: true }).addTo(map);
@@ -356,7 +361,7 @@ $('btn-control').onclick = (e) => {
   const on = e.target.getAttribute('aria-pressed') !== 'true';
   e.target.setAttribute('aria-pressed', String(on));
   document.documentElement.dataset.theme = on ? 'dark' : (isDark() ? 'dark' : 'light');
-  if (on && baseName === 'Mapa claro') { baseBeforeControl = baseName; setBase('Mapa oscuro'); } else if (!on && baseBeforeControl) { setBase(baseBeforeControl); baseBeforeControl = null; }
+  if (on && baseName === 'Mapa (OpenStreetMap)') { baseBeforeControl = baseName; setBase('Mapa oscuro'); } else if (!on && baseBeforeControl) { setBase(baseBeforeControl); baseBeforeControl = null; }
   clearInterval(rotateTimer);
   if (on) {
     let i = 0;
